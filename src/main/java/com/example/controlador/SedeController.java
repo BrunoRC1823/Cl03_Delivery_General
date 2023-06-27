@@ -1,5 +1,6 @@
 package com.example.controlador;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +21,7 @@ import com.example.entidad.Sede;
 
 @RestController
 @RequestMapping("/rest/general")
+@CrossOrigin(origins = "http://localhost:3000")
 public class SedeController {
 	// PostgreSQL
 	String URL_PAIS = "http://localhost:8091/rest/pais";
@@ -48,12 +51,12 @@ public class SedeController {
 
 		// Establecer el país en la sede
 		sede.setPais(pais);
-
+		sede.setFechaRegistro(LocalDateTime.now());
 		// Realizar la solicitud POST para registrar la sede
 		HttpEntity<Sede> requestEntity = new HttpEntity<>(sede);
 		restTemplate.postForObject(URL_SEDE, requestEntity, Sede.class);
 
-		salida.put("mensaje", "Registro exitoso");
+		salida.put("mensaje", "Se registro con exito la sede!");
 		salida.put("sede", sede);
 		return new ResponseEntity<>(salida, HttpStatus.CREATED);
 	}
